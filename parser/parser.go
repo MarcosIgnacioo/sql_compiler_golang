@@ -4,11 +4,13 @@ import (
 	"fmt"
 
 	"github.com/MarcosIgnacioo/arraylist"
+	"github.com/MarcosIgnacioo/error"
 	"github.com/MarcosIgnacioo/stack"
 	"github.com/MarcosIgnacioo/token"
+	"github.com/MarcosIgnacioo/utils"
 )
 
-func Parse(tokens arraylist.ArrayList) string {
+func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 	userTokens := tokens.ArrayList
 	rules := stack.New()
 	rules.Push(199)
@@ -17,31 +19,33 @@ func Parse(tokens arraylist.ArrayList) string {
 	var currentRule int
 	for currentRule != 199 {
 		currentRule = rules.Pop().(int)
+		// rules.Print()
 		currentToken := userTokens[pointer].(*token.Token)
+		// fmt.Println("Token actual", currentToken.Token, " Identificador", currentToken.Type)
 		if currentRule < 300 {
 			if currentRule == currentToken.Value {
 				pointer++
 			} else {
-
+				fmt.Println("WHASP")
 				break
 			}
 		} else {
-			productions := syntaxTable[currentRule][token.TokenType(currentToken.Token)]
+			productions := syntaxTable[currentRule][currentToken.Type]
 			if productions != nil {
 				if productions[0] != 99 {
 					InsertInReverse(&rules, productions)
 				}
 			} else {
-				fmt.Println("error")
-				fmt.Println(currentRule)
-				fmt.Println(productions)
-				fmt.Println(currentToken.Type)
-				fmt.Println(currentToken.String())
-				break
+				expectedRules := utils.ToInterfaceArray(utils.Obtain_keys_from_syntax_table(syntaxTable[currentRule]))
+				error := error.New(query, currentToken.Token, currentToken.Line, expectedRules)
+				// error.Message += fmt.Sprint("regla actual: ", currentRule, "\n")
+				// error.Message += "ERROR CODE: \n"
+				return error, nil
 			}
 		}
 	}
-	return ""
+	success := "QUERY VALIDO"
+	return nil, &success
 }
 
 func InsertInReverse(stack *stack.Stack, array []int) {
@@ -65,20 +69,21 @@ var syntaxTable = map[int]map[token.TokenType][]int{
 	},
 
 	303: {
-		token.FROM: []int{99}, token.COMMA: []int{50, 302}, token.EOQ: []int{99},
+		token.FROM: []int{99}, token.COMMA: []int{50, 302}, token.EOQ: []int{99}, token.DELIMITER: []int{50, 302},
 	},
 
 	304: {
-		token.IDENTIFIER: []int{305},
+		token.IDENTIFIER: []int{4, 305},
 	},
 
 	305: {
 		token.RELATIONAL: []int{99},
 		token.FROM:       []int{99},
 		token.IN:         []int{99},
+		token.DELIMITER:  []int{99},
 		token.AND:        []int{99},
 		token.OR:         []int{99},
-		token.DELIMITER:  []int{99},
+		token.DOT:        []int{51, 4},
 		token.RPAREN:     []int{99},
 		token.EOQ:        []int{99},
 	},
@@ -89,7 +94,7 @@ var syntaxTable = map[int]map[token.TokenType][]int{
 
 	307: {
 		token.WHERE:     []int{99},
-		token.DELIMITER: []int{308, 307},
+		token.DELIMITER: []int{50, 306},
 		token.RPAREN:    []int{99},
 		token.EOQ:       []int{99},
 	},

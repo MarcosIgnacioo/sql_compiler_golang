@@ -64,45 +64,45 @@ func generateLexerInstance() func(string) (token.TokenType, string, int, int) {
 	return func(input string) (token.TokenType, string, int, int) {
 		switch input {
 		case "SELECT":
-			return KEYWORD, "s", 10, 1
+			return token.SELECT, "s", 10, 1
 		case "FROM":
-			return KEYWORD, "f", 11, 1
+			return token.FROM, "f", 11, 1
 		case "WHERE":
-			return KEYWORD, "w", 12, 1
+			return token.WHERE, "w", 12, 1
 		case "IN":
-			return KEYWORD, "n", 13, 1
+			return token.IN, "n", 13, 1
 		case "AND":
-			return KEYWORD, "y", 14, 1
+			return token.AND, "y", 14, 1
 		case "OR":
-			return KEYWORD, "o", 15, 1
+			return token.OR, "o", 15, 1
 		case "CREATE":
-			return KEYWORD, "c", 16, 1
+			return token.CREATE, "c", 16, 1
 		case "TABLE":
-			return KEYWORD, "t", 17, 1
+			return token.TABLE, "t", 17, 1
 		case "CHAR":
-			return KEYWORD, "h", 18, 1
+			return token.CHAR, "h", 18, 1
 		case "NUMERIC":
-			return KEYWORD, "u", 19, 1
+			return token.NUMERIC, "u", 19, 1
 		case "NOT":
-			return KEYWORD, "e", 20, 1
+			return token.NOT, "e", 20, 1
 		case "NULL":
-			return KEYWORD, "g", 21, 1
+			return token.NULL, "g", 21, 1
 		case "CONSTRAINT":
-			return KEYWORD, "b", 22, 1
+			return token.CONSTRAINT, "b", 22, 1
 		case "KEY":
-			return KEYWORD, "k", 23, 1
+			return token.KEY, "k", 23, 1
 		case "PRIMARY":
-			return KEYWORD, "p", 24, 1
+			return token.PRIMARY, "p", 24, 1
 		case "FOREIGN":
-			return KEYWORD, "j", 25, 1
+			return token.FOREIGN, "j", 25, 1
 		case "REFERENCES":
-			return KEYWORD, "l", 26, 1
+			return token.REFERENCES, "l", 26, 1
 		case "INSERT":
-			return KEYWORD, "m", 27, 1
+			return token.INSERT, "m", 27, 1
 		case "INTO":
-			return KEYWORD, "q", 28, 1
+			return token.INTO, "q", 28, 1
 		case "VALUES":
-			return KEYWORD, "v", 29, 1
+			return token.VALUES, "v", 29, 1
 		case ",":
 			return DELIMITER, ",", 50, 5
 		case ".":
@@ -124,7 +124,7 @@ func generateLexerInstance() func(string) (token.TokenType, string, int, int) {
 		case "-":
 			return OPERATOR, "-", 7, 71
 		case "*":
-			return OPERATOR, "*", 7, 72
+			return token.ASTERISK, "*", 72, 72
 		case "/":
 			return OPERATOR, "/", 7, 73
 		case "=":

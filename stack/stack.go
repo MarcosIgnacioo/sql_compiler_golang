@@ -1,6 +1,7 @@
 package stack
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -16,6 +17,15 @@ type Stack struct {
 
 func New() Stack {
 	return Stack{Length: 0, Head: nil}
+}
+
+func (s *Stack) Print() {
+	curr := s.Head
+	fmt.Println("/////////")
+	for curr != nil {
+		fmt.Println(curr.Value)
+		curr = curr.Prev
+	}
 }
 
 // Metemos un nuevo elemento al stack, por lo que ahora la cabeza de nuestro stack va a ser el ultimo elemento que metimos
