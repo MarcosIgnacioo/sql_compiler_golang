@@ -138,22 +138,32 @@ func generateLexerInstance() func(string) (token.TokenType, string, int, int) {
 		case ">=":
 			return RELATIONAL, ">=", 8, 85
 		default:
+			// En caso de que el token no sea ninguna palabra o caracter reservado significa que puede ser 3 cosas
+			// Una constante
+			// Un identificador
+			// Una constante numerica sin ''
+			// Un token ilegal
+			// Por lo que evaluamos las siguientes situaciones con regex
+			// isConstant sirve para saber si es una constante
 			isConstant := utils.StringMatchesAll(input, globals.REGEX_SQL_CONSTANT)
 			if isConstant {
 				constantCount++
 				constantValue, constantType := getConstantValue(input)
 				return constantType, input, constantValue, constantCount
 			} else {
+				// isIdentifier sirve para saber si es un identificador
 				isIdentifier := utils.StringMatchesAll(input, globals.REGEX_SQL_IDENTIFIER)
 				if isIdentifier {
 					identifierCount++
 					return IDENTIFIER, input, 4, identifierCount
 				} else {
+					// isDecimal sirve para saber si es un numero puramente, sin ''
 					isDecimal := utils.StringMatchesAll(input, globals.REGEX_SQL_DECIMAL)
 					if isDecimal {
 						constantCount++
 						return CONSTANT, input, 61, constantCount
 					}
+					// En el caso de que no encaje con ningun caso significa que es ilegal
 					return ILLEGAL, input, 999, 999
 				}
 			}
@@ -161,6 +171,7 @@ func generateLexerInstance() func(string) (token.TokenType, string, int, int) {
 	}
 }
 
+// Definir si es una constante alfanumerica o numerica
 func getConstantValue(input string) (int, token.TokenType) {
 	isNumeric := utils.StringMatchesAll(input, globals.REGEX_SQL_NUMERICAL)
 	if isNumeric {

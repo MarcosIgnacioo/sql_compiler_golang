@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-
 	"github.com/MarcosIgnacioo/arraylist"
 	"github.com/MarcosIgnacioo/error"
 	"github.com/MarcosIgnacioo/stack"
@@ -10,6 +8,7 @@ import (
 	"github.com/MarcosIgnacioo/utils"
 )
 
+// Funcion para realizar el parseo de los tokens, se recibe un arreglo de tokens y se ejecuta el algoritmo, en caso de encontrar un error devuelve una variable de tipo error con los datos del propio error, si no encuentra ningun error sintactico devuelve un string que dice "success"
 func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 	userTokens := tokens.ArrayList
 	rules := stack.New()
@@ -19,15 +18,14 @@ func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 	var currentRule int
 	for currentRule != 199 {
 		currentRule = rules.Pop().(int)
-		// rules.Print()
 		currentToken := userTokens[pointer].(*token.Token)
-		// fmt.Println("Token actual", currentToken.Token, " Identificador", currentToken.Type)
 		if currentRule < 300 {
 			if currentRule == currentToken.Value {
 				pointer++
 			} else {
-				fmt.Println("WHASP")
-				break
+				expectedRules := utils.ToInterfaceArray(utils.Obtain_keys_from_syntax_table(syntaxTable[currentRule]))
+				error := error.New(query, currentToken.Token, currentToken.Line, expectedRules)
+				return error, nil
 			}
 		} else {
 			productions := syntaxTable[currentRule][currentToken.Type]
@@ -38,8 +36,6 @@ func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 			} else {
 				expectedRules := utils.ToInterfaceArray(utils.Obtain_keys_from_syntax_table(syntaxTable[currentRule]))
 				error := error.New(query, currentToken.Token, currentToken.Line, expectedRules)
-				// error.Message += fmt.Sprint("regla actual: ", currentRule, "\n")
-				// error.Message += "ERROR CODE: \n"
 				return error, nil
 			}
 		}
@@ -48,12 +44,14 @@ func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 	return nil, &success
 }
 
+// Se inserta en reversa al stack
 func InsertInReverse(stack *stack.Stack, array []int) {
 	for i := len(array) - 1; i >= 0; i-- {
 		stack.Push(array[i])
 	}
 }
 
+// Tabla sintactica con las reglas, cada regla contiene propiamente otro hashmap el cual contiene de llave al token terminal que se encuentre en ese momento, y su valor es un arreglo de enteros que son las producciones.
 var syntaxTable = map[int]map[token.TokenType][]int{
 
 	300: {

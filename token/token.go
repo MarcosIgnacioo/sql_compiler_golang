@@ -74,15 +74,17 @@ const (
 	EOQ = "$"
 )
 
+// El tipo de los tokens (SELECT, COMMA, EQUALS, etc)
 type TokenType string
 
+// Struct que tendran los tokens
 type Token struct {
 	Type   TokenType // SELECT
 	Token  string    // "SELECT"
 	Symbol string    // "s"
 	Value  int       // 10
 	Code   int       // 1
-	Line   int       // Linea 1
+	Line   int       // 1
 }
 
 // Toma como parametro el tipo de token, el token propiamente, el simbolo, el valor, el codigo y el numero de linea
