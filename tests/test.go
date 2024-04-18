@@ -1,7 +1,10 @@
 package tests
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/MarcosIgnacioo/lexer"
 	"github.com/MarcosIgnacioo/parser"
@@ -19,6 +22,28 @@ func TestLexer() {
 			break
 		}
 		// input = 6
+		if input == 9 {
+			reader := bufio.NewReader(os.Stdin)
+			fmt.Println("Escriba su query")
+			queryUser, error := reader.ReadString('\n')
+
+			if error != nil {
+				fmt.Println("Error leyendo", error)
+				return
+			}
+
+			queryUser = strings.TrimSpace(queryUser)
+			tokens := lexer.GetLexedTokens(queryUser)
+
+			err, good := parser.Parse(tokens, queryUser)
+			utils.PrintQuery(queryUser, input)
+			if err != nil {
+				utils.PrintError(err.String())
+			} else {
+				utils.PrintSuccess(*good)
+			}
+			continue
+		}
 		if input-1 < len(queries) {
 			query := queries[input-1]
 			tokens := lexer.GetLexedTokens(query)

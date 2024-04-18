@@ -10,15 +10,20 @@ import (
 
 // Funcion para realizar el parseo de los tokens, se recibe un arreglo de tokens y se ejecuta el algoritmo, en caso de encontrar un error devuelve una variable de tipo error con los datos del propio error, si no encuentra ningun error sintactico devuelve un string que dice "success"
 func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
+
 	userTokens := tokens.ArrayList
 	rules := stack.New()
 	rules.Push(199)
 	rules.Push(300)
 	pointer := 0
+
 	var currentRule int
+
 	for currentRule != 199 {
+
 		currentRule = rules.Pop().(int)
 		currentToken := userTokens[pointer].(*token.Token)
+
 		if currentRule < 300 {
 			if currentRule == currentToken.Value {
 				pointer++
@@ -40,8 +45,10 @@ func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 			}
 		}
 	}
+
 	success := "QUERY VALIDO"
 	return nil, &success
+
 }
 
 // Se inserta en reversa al stack

@@ -21,7 +21,7 @@ func New(q string, f interface{}, ln int, e []interface{}) *Error {
 // Funcnion para obtenter el texto del error
 func (e *Error) String() string {
 	e.Message += fmt.Sprint("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n")
-	e.Message += fmt.Sprint("Error ocurrio en la linea: ", e.Line, " nearby: `", e.From, "`\n")
+	e.Message += fmt.Sprint("Error ocurrio en la linea: ", e.Line, " cerca de: `", e.From, "`\n")
 	e.Message += fmt.Sprint("Se esperaban algunos de los siguientes tokens\n")
 	for _, tok := range e.Expected {
 		e.Message += fmt.Sprintf("`%v`\n", tok)
