@@ -31,11 +31,12 @@ const (
 
 	// Delimiters
 
-	COMMA  = ","
-	DOT    = "."
-	LPAREN = "("
-	RPAREN = ")"
-	QUOTE  = "'"
+	COMMA     = ","
+	DOT       = "."
+	SEMICOLON = ";"
+	LPAREN    = "("
+	RPAREN    = ")"
+	QUOTE     = "'"
 
 	// Constants
 
@@ -91,13 +92,49 @@ type Token struct {
 func NewToken(ty TokenType, tk string, sy string, va int, co int, ln int) *Token {
 	return &Token{Type: ty, Token: tk, Symbol: sy, Value: va, Code: co, Line: ln}
 }
+
 func (tk *Token) String() string {
 	return fmt.Sprintf("Type:%v\nToken:%v\nSymbol:%v\nValue:%v\nCode:%v\nLine:%v\n------\n", tk.Type, tk.Token, tk.Symbol, tk.Value, tk.Code, tk.Line)
 }
 
-// func LookupIdent(ident string) TokenType {
-// 	if keyword, ok := keywords[ident]; ok {
-// 		return keyword
-// 	}
-// 	return IDENT
-// }
+var LexerFinder = map[int]string{
+	4:   "IDENTIFIER",
+	10:  "SELECT",
+	11:  "FROM",
+	12:  "WHERE",
+	13:  "IN",
+	14:  "AND",
+	15:  "OR",
+	16:  "CREATE",
+	17:  "TABLE",
+	18:  "CHAR",
+	19:  "NUMERIC",
+	20:  "NOT",
+	21:  "NULL",
+	22:  "CONSTRAINT",
+	23:  "KEY",
+	24:  "PRIMARY",
+	25:  "FOREIGN",
+	26:  "REFERENCES",
+	27:  "INSERT",
+	28:  "INTO",
+	29:  "VALUES",
+	50:  ",",
+	51:  ".",
+	52:  "(",
+	53:  ")",
+	54:  "'",
+	55:  ";",
+	61:  "ALFANUMERICA",
+	62:  "ALFANUMERICA",
+	70:  "+",
+	71:  "-",
+	72:  "*",
+	73:  "/",
+	81:  ">",
+	82:  "<",
+	83:  "=",
+	84:  ">=",
+	85:  "<=",
+	199: "FINAL DEL QUERY",
+}

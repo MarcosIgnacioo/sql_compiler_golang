@@ -104,21 +104,25 @@ func generateLexerInstance() func(string) (token.TokenType, string, int, int) {
 		case "VALUES":
 			return token.VALUES, "v", 29, 1
 		case ",":
-			return DELIMITER, ",", 50, 5
+			return token.COMMA, ",", 50, 5
 		case ".":
 			return DOT, ".", 51, 5
 		case "(":
 			return DELIMITER, "(", 52, 5
 		case ")":
 			return RPAREN, ")", 53, 5
+			// TOFIX esta parte deberian de ser 54 xd
 		case "'":
-			return DELIMITER, "'", 53, 5
+			return DELIMITER, "'", 54, 5
 		case "‘":
-			return DELIMITER, "‘", 53, 5
+			return DELIMITER, "‘", 54, 5
 		case "’":
-			return DELIMITER, "’", 53, 5
+			return DELIMITER, "’", 54, 5
 		case "\"":
-			return DELIMITER, "\"", 53, 5
+			return DELIMITER, "\"", 54, 5
+			// EOTF								  ^^
+		case ";":
+			return token.SEMICOLON, ";", 55, 5
 		case "+":
 			return OPERATOR, "+", 7, 70
 		case "-":
@@ -161,7 +165,7 @@ func generateLexerInstance() func(string) (token.TokenType, string, int, int) {
 					isDecimal := utils.StringMatchesAll(input, globals.REGEX_SQL_DECIMAL)
 					if isDecimal {
 						constantCount++
-						return CONSTANT, input, 61, constantCount
+						return CN, input, 61, constantCount
 					}
 					// En el caso de que no encaje con ningun caso significa que es ilegal
 					return ILLEGAL, input, 999, 999
