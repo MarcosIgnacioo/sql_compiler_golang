@@ -47,8 +47,11 @@ func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 			if currentRule == currentToken.Value {
 				pointer++
 			} else {
+				fmt.Println("wtf")
 				fmt.Println(currentRule)
-				fmt.Println(currentToken.String())
+				nextToken := userTokens[pointer+1].(*token.Token)
+				fmt.Println(nextToken.String())
+				fmt.Println(nextToken)
 				error := error.New(query, currentToken.Token, currentToken.Line, []interface{}{token.LexerFinder[currentRule]})
 				return error, nil
 			}
@@ -118,7 +121,7 @@ var syntaxTable = map[int]map[token.TokenType][]int{
 
 	208: {
 		token.PRIMARY: []int{24, 23},
-		token.FOREIGN: []int{4, 209},
+		token.FOREIGN: []int{25, 23},
 	},
 
 	209: {

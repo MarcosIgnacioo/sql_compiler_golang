@@ -17,7 +17,7 @@ func TestLexer() {
 	queries := utils.ErrorQueries
 	for {
 
-		fmt.Println("Ingrese el numero del query que desea evaluar [1-14]\n1-8 Son Selects\n9-14 son CREATE/INSERTS \nEscriba 0 para salir")
+		fmt.Println("Ingrese el numero del query que desea evaluar [1-15]\n1-8 Son Selects\n9-15 son CREATE/INSERTS \nEscriba 0 para salir")
 		fmt.Scanln(&input)
 		if input == 0 {
 			break
