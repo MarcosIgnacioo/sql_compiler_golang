@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -156,17 +157,20 @@ func generateLexerInstance() func(string) (token.TokenType, string, int, int) {
 				return constantType, input, constantValue, constantCount
 			} else {
 				// isIdentifier sirve para saber si es un identificador
-				isIdentifier := utils.StringMatchesAll(input, globals.REGEX_SQL_IDENTIFIER)
-				if isIdentifier {
-					identifierCount++
-					return IDENTIFIER, input, 4, identifierCount
+				// Basicamente lo que esta pasando es que si agarra los tokens con multiples __ psin embargo no los detecta como identificador es porque en la regex d los identificadores no pusimos que pudieran tener numeros pero pues si se opucpan el roollo esta en q si se los pongo para q los detecte m agarra a las constantes numericas (el 2) y las detecta como identficador por alguna razon la cual esta bien mensa porque el StringMatchesAll deberia de nomas devolver true si todo matchea y asi aaaa q huevaaaaa
+				isDecimal := utils.StringMatchesAll(input, globals.REGEX_SQL_DECIMAL)
+				if isDecimal {
+					constantCount++
+					return CN, input, 61, constantCount
 				} else {
 					// isDecimal sirve para saber si es un numero puramente, sin ''
-					isDecimal := utils.StringMatchesAll(input, globals.REGEX_SQL_DECIMAL)
-					if isDecimal {
-						constantCount++
-						return CN, input, 61, constantCount
+					isIdentifier := utils.StringMatchesAll(input, globals.REGEX_SQL_IDENTIFIER)
+					if isIdentifier {
+						identifierCount++
+						return IDENTIFIER, input, 4, identifierCount
 					}
+					fmt.Println("este es el token ilegal")
+					fmt.Println(input)
 					// En el caso de que no encaje con ningun caso significa que es ilegal
 					return ILLEGAL, input, 999, 999
 				}

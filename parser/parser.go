@@ -47,11 +47,7 @@ func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 			if currentRule == currentToken.Value {
 				pointer++
 			} else {
-				fmt.Println("wtf")
-				fmt.Println(currentRule)
-				nextToken := userTokens[pointer+1].(*token.Token)
-				fmt.Println(nextToken.String())
-				fmt.Println(nextToken)
+				fmt.Println(currentToken)
 				error := error.New(query, currentToken.Token, currentToken.Line, []interface{}{token.LexerFinder[currentRule]})
 				return error, nil
 			}
@@ -62,6 +58,7 @@ func Parse(tokens arraylist.ArrayList, query string) (*error.Error, *string) {
 					InsertInReverse(&rules, productions)
 				}
 			} else {
+				fmt.Println(currentToken)
 				expectedRules := utils.ToInterfaceArray(utils.Obtain_keys_from_syntax_table(syntaxTable[currentRule]))
 				error := error.New(query, currentToken.Token, currentToken.Line, expectedRules)
 				return error, nil
